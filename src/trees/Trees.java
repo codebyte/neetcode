@@ -200,30 +200,63 @@ public class Trees {
         return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
-    class Pair {
+    static class Pair {
         boolean p;
         boolean q;
 
         Pair(boolean p, boolean q) {
-            this.p = false;
-            this.q = false;
+            this.p = p;
+            this.q = q;
+        }
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "p=" + p +
+                    ", q=" + q +
+                    '}';
         }
     }
 
 
-    TreeNode lca = null;
+    static TreeNode lca = null;
 
-    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public static Pair lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        boolean pFound = false;
+        boolean qFound = false;
 
-        if ((root.left != null) && (root.right != null)) {
-
-
-
-
-
+        if (root == null) {
+            return new Pair(pFound, qFound);
         }
 
+        if (root.val == p.val) {
+            pFound = true;
+        }
+        if (root.val == q.val) {
+            qFound = true;
+        }
 
+        /*
+        if ((lca == null) && (pFound == true) && (qFound == true)) {
+            lca = root;
+        }
+        */
+
+        Pair lPair = lowestCommonAncestor(root.left, p, q);
+        Pair rPair = lowestCommonAncestor(root.right, p, q);
+
+        if ((lPair.p) || (rPair.p)) {
+            pFound = true;
+        }
+        if ((lPair.q) || (rPair.q)) {
+            qFound = true;
+        }
+
+        if ((lca == null) && (pFound == true) && (qFound == true)) {
+            lca = root;
+        }
+
+        return new Pair(pFound, qFound);
     }
 
 
@@ -274,6 +307,14 @@ public class Trees {
         if (node != null) {
             //isSubtree(node, node2);
             System.out.println("Sub Tree : " + isSubtree(node, node2));
+        }
+
+        if (node != null) {
+            TreeNode p = new TreeNode(1);
+            TreeNode q = new TreeNode(4);
+            print(node);
+            lowestCommonAncestor(node, p, q);
+            System.out.println("LCA : " + lca.val);
         }
 
 
